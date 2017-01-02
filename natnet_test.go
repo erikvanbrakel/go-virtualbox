@@ -17,6 +17,13 @@ func TestCreateAndDeleteNATNet(t *testing.T) {
     }
 
     t.Logf("%+v", nat)
+
+    nat.DHCPEnabled = true
+
+    nat.Update()
+
+    t.Logf("%+v", nat)
+
     err = DeleteNATNet("testing123")
     if err != nil {
         t.Fatal(err)

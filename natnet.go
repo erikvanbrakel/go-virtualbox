@@ -8,11 +8,12 @@ import (
 
 // A NATNet defines a NAT network.
 type NATNet struct {
-	Name    string
-	IPv4    net.IPNet
-	IPv6    net.IPNet
-	DHCP    bool
-	Enabled bool
+	Name           string
+	IPv4           net.IPNet
+	IPv6           net.IPNet
+	IPv6Enabled    bool
+	DHCPEnabled    bool
+	Enabled        bool
 }
 
 // NATNets gets all NAT networks in a  map keyed by NATNet.Name.
@@ -55,8 +56,10 @@ func NATNets() (map[string]NATNet, error) {
 				return nil, err
 			}
 			n.IPv6.Mask = ipnet.Mask
+		case "IPv6 Enabled":
+			n.IPv6Enabled = (val == "Yes")
 		case "DHCP Enabled":
-			n.DHCP = (val == "Yes")
+			n.DHCPEnabled = (val == "Yes")
 		case "Enabled":
 			n.Enabled = (val == "Yes")
 		}
@@ -113,4 +116,24 @@ func DeleteNATNet(name string) error {
 	}
 
 	return nil
+}
+
+func (nat *NATNet) Update() {
+
+	args := []string {
+		"natnetwork", "modify",
+		"--netname", nat.Name,
+	}
+
+	if nat.DHCPEnabled {
+		args = append(args, "--dhcp", "on")
+	} else {
+		args = append(args, "--dhcp", "off")
+	}
+
+	if nat.IPv6Enabled {
+		args = append(args, "--ipv6", "on")
+	} else {
+		args = append(args, "--ipv6", "off")
+	}
 }
