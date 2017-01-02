@@ -9,3 +9,18 @@ func TestNATNets(t *testing.T) {
 	}
 	t.Logf("%+v", m)
 }
+
+func TestCreateAndDeleteNATNet(t *testing.T) {
+    nat, err := CreateNATNet("testing123", "10.0.123.0/24")
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v", nat)
+    err = DeleteNATNet("testing123")
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    t.Logf("%+v", nat)
+}

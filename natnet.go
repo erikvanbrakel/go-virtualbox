@@ -66,3 +66,39 @@ func NATNets() (map[string]NATNet, error) {
 	}
 	return m, nil
 }
+
+func CreateNATNet(name, cidr_block string) (*NATNet, error) {
+
+	args := []string{
+		"natnetwork","add",
+		"--netname",name,
+		"--network",cidr_block,
+	}
+
+	if err := vbm(args...); err != nil {
+		return nil, err
+	}
+
+	nats, err := NATNets()
+
+	if err != nil {
+		return nil, err
+	}
+
+	nat, _ := nats[name]
+
+	return &nat, nil
+}
+
+func DeleteNATNet(name string) error {
+	args := []string{
+		"natnetwork", "remove",
+		"--netname", name,
+	}
+
+	if err := vbm(args...); err != nil {
+		return err
+	}
+
+	return nil
+}
