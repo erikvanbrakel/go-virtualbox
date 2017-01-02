@@ -3,7 +3,6 @@ package virtualbox
 import (
 	"bufio"
 	"net"
-	"strconv"
 	"strings"
 )
 
@@ -51,11 +50,11 @@ func NATNets() (map[string]NATNet, error) {
 			if val == "" {
 				continue
 			}
-			l, err := strconv.ParseUint(val, 10, 7)
+			_, ipnet, err := net.ParseCIDR(val)
 			if err != nil {
 				return nil, err
 			}
-			n.IPv6.Mask = net.CIDRMask(int(l), net.IPv6len*8)
+			n.IPv6.Mask = ipnet.Mask
 		case "DHCP Enabled":
 			n.DHCP = (val == "Yes")
 		case "Enabled":
