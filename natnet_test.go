@@ -11,7 +11,7 @@ func TestNATNets(t *testing.T) {
 }
 
 func TestCreateAndDeleteNATNet(t *testing.T) {
-    nat, err := CreateNATNet("testing123", "10.0.123.0/24")
+    nat, err := CreateNATNet("testing123", "10.0.123.0/24", false, true)
     if err != nil {
         t.Fatal(err)
     }

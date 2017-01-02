@@ -67,12 +67,24 @@ func NATNets() (map[string]NATNet, error) {
 	return m, nil
 }
 
-func CreateNATNet(name, cidr_block string) (*NATNet, error) {
+func CreateNATNet(name, cidr_block string, supports_dhcp, supports_ipv6 bool) (*NATNet, error) {
 
 	args := []string{
 		"natnetwork","add",
 		"--netname",name,
 		"--network",cidr_block,
+	}
+
+	if supports_dhcp {
+		args = append(args, "--dhcp", "on")
+	} else {
+		args = append(args, "--dhcp", "off")
+	}
+
+	if supports_ipv6 {
+		args = append(args, "--ipv6", "on")
+	} else {
+		args = append(args, "--ipv6", "off")
 	}
 
 	if err := vbm(args...); err != nil {
