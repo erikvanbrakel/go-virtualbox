@@ -118,7 +118,7 @@ func DeleteNATNet(name string) error {
 	return nil
 }
 
-func (nat *NATNet) Update() {
+func (nat *NATNet) Update() error {
 
 	args := []string {
 		"natnetwork", "modify",
@@ -136,4 +136,10 @@ func (nat *NATNet) Update() {
 	} else {
 		args = append(args, "--ipv6", "off")
 	}
+
+	if err := vbm(args...); err != nil {
+		return err
+	}
+
+	return nil
 }
